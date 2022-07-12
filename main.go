@@ -1,10 +1,12 @@
-// package main
+package main
 
-// import (
-// 	"fmt"
-// 	"hello/queue"
-// 	"hello/tree"
-// )
+import (
+	"bufio"
+	"fmt"
+	"io"
+	// "hello/queue"
+	// "hello/tree"
+)
 
 // type MyTreeNode struct {
 // 	Node *tree.TreeNode
@@ -32,3 +34,42 @@
 
 // 	q := queue.Queue{1}
 // }
+
+type myReader struct {
+	ComplexContent string
+	Offset         int
+	LenOnce        int
+}
+
+func (mr myReader) Read(p []byte) (n int, err error) {
+	totalLen := len(mr.ComplexContent)
+	if mr.Offset < totalLen {
+		if leftLen := totalLen - mr.Offset; leftLen < mr.LenOnce {
+			n = copy(p, []byte(mr.ComplexContent)[mr.Offset:mr.Offset+leftLen])
+			return n, io.EOF
+		}
+		n = copy(p, []byte(mr.ComplexContent)[mr.Offset:mr.Offset+mr.LenOnce])
+		return n, nil
+	}
+	return 0, nil
+}
+
+func printReaderContents(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+}
+
+func main() {
+	mr := myReader{ComplexContent: `jken
+	xxx....
+	emoji
+	ha`,
+		Offset:  0,
+		LenOnce: 1,
+	}
+
+	printReaderContents(mr)
+
+}
