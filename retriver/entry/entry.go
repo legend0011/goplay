@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"hello/retriver/ihttp"
 	"hello/retriver/mock"
 )
 
@@ -54,12 +55,41 @@ func main() {
 	// p = &mock.Poster{}
 	// post(p)
 
-	var rp RetriverPoster
-	rp = &mock.RetriverPoster{}
-
-	fmt.Println(rp) // call rp's String()
-
+	rp := &mock.RetriverPoster{}
 	session("www.google.com", rp)
 
 	fmt.Println(rp) // call rp's String()
+
+	fmt.Println("Try type assertion ----------------------")
+	// want to check what's behind an interface
+	var rpArr []RetriverPoster
+	mockRP := &mock.RetriverPoster{}
+	realRP := &ihttp.RetriverPoster{}
+
+	rpArr = append(rpArr, mockRP, realRP)
+
+	for i, item := range rpArr {
+		fmt.Printf("[%d] %v", i, item) // call rp's String()
+		if _, ok := item.(*mock.RetriverPoster); ok {
+			fmt.Printf("[%d] is mocked!\n", i)
+		} else if _, ok := item.(*ihttp.RetriverPoster); ok {
+			fmt.Printf("[%d] is real!\n", i)
+		} else {
+			fmt.Printf("[%d] unknown rp\n", i)
+		}
+	}
+
+	fmt.Println("Try type switch ----------------------")
+
+	for i, item := range rpArr {
+		switch item.(type) {
+		case *mock.RetriverPoster:
+			fmt.Printf("[%d] is mocked!\n", i)
+		case *ihttp.RetriverPoster:
+			fmt.Printf("[%d] is real!\n", i)
+		default:
+			fmt.Printf("[%d] unknown rp\n", i)
+		}
+	}
+
 }

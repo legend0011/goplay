@@ -1,4 +1,4 @@
-package mock
+package ihttp
 
 import "fmt"
 
@@ -18,6 +18,6 @@ func (rp *RetriverPoster) Get(url string) string {
 
 // implement fmt.Stringer
 func (rp *RetriverPoster) String() string {
-	return fmt.Sprintf("Fake Jack...... here\n RP.Head=%s, RP.Content=%s\n",
+	return fmt.Sprintf("Real Jack...... here\n RP.Head=%s, RP.Content=%s\n",
 		rp.Head, rp.Content["key"])
 }
