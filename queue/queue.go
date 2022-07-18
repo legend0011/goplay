@@ -13,3 +13,9 @@ func (q *Queue) Print() {
 		fmt.Printf("(%d, %d) ", i, v)
 	}
 }
+
+func (q *Queue) Pop() int {
+	head := (*q)[0]
+	*q = (*q)[1:]
+	return head
+}
