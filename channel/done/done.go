@@ -62,7 +62,36 @@ func chanDemo() {
 	}
 }
 
+func closeChan() {
+	ch := make(chan int)
+	go func() {
+		for i := 0; i < 10; i++ {
+			ch <- i
+		}
+		close(ch) // will Dead lock if not close, no one is
+	}()
+	for i := range ch { // change to for {fmt.Println(<-ch)} will print 0 forever
+		fmt.Println(i)
+	}
+	fmt.Println("Done")
+}
+
+func closeChan2() {
+	ch := make(chan int)
+	go func() {
+		for i := range ch {
+			fmt.Println(i)
+		}
+	}()
+	for i := 0; i < 10; i++ {
+		ch <- i
+	}
+	close(ch)
+	fmt.Println("Done")
+}
+
 func main() {
-	chanDemo()
+	closeChan()
+	//chanDemo()
 	// bufferedChannel()
 }
