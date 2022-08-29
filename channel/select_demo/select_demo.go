@@ -30,6 +30,7 @@ func main() {
 
 func consume(ch <-chan int, quit chan<- int) {
 	total := 10
+	// consume from ch for 10 times
 	for i := range ch {
 		if total == 0 {
 			break
